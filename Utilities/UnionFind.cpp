@@ -21,3 +21,10 @@ void join(int u, int v){
     if (a == b) return;
     p[a] = b;  
 }
+
+int main(){
+    initialize(5);
+    join(3,1);
+    join(4,1);
+    join(2,4);
+}
