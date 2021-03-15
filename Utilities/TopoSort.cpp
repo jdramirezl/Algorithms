@@ -2,31 +2,25 @@
 
 using namespace std;
 
+#define MAXN 5 // highest value of node for a problem
 #define vvi vector<vector<int>>
 
-void util(vvi graph, stack<int> &stack, vector<bool> visited, int node){
+void topo_sort_util(vvi graph, vector<int> &stack, vector<bool> &visited, int node){
     visited[node] = true;
 
-    for(int i=0; i<graph[node].size(); ++i){
+    for (int i = 0; i < graph[node].size(); ++i){
         int curr_node = graph[node][i];
-        if(visited[curr_node]) continue;
-        util(graph, stack, visited, curr_node);
+        if (visited[curr_node]) continue;
+        topo_sort_util(graph, stack, visited, curr_node);
     }
 
-    stack.push(node);
+    stack.push_back(node);
 }
 
-void topo_sort(vvi graph, vector<bool> visited, int n_of_nodes, int n_of_edges){
-    stack<int> sorted_graph;
-
-    for(int i=0; i< n_of_nodes; ++i){
-        if(visited[i]) continue;
-        util(graph, sorted_graph, visited, i);
-    }
-
-    while (!sorted_graph.empty()) {
-        cout << sorted_graph.top() << " ";
-        sorted_graph.pop();
+void topo_sort(vvi graph, vector<bool> &visited, vector<int> &stack){
+    for (int i = 0; i < MAXN; ++i){
+        if (visited[i]) continue;
+        topo_sort_util(graph, stack, visited, i);
     }
 }
 
@@ -38,7 +32,7 @@ int main(){
     vvi graph(n_of_nodes, vector<int>()); 
 
     //Fill visited array
-    vector<bool> visited(n_of_nodes, false);
+    vector<bool> visited(MAXN, false);
 
     //Fill graph
     for(int i=0; i<n_of_edges; ++i){
@@ -46,5 +40,8 @@ int main(){
         graph[from].push_back(to);
     }
 
-    topo_sort(graph, visited, n_of_nodes, n_of_edges);
+    //TopoSort Stack
+    vector<int> stack;
+
+    topo_sort(graph, visited, stack);
 }
